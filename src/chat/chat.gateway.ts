@@ -77,6 +77,14 @@ export class ChatGateway
     console.log(selectedUser);
   }
 
+  @SubscribeMessage('user-typing')
+  handleUserTyping(@ConnectedSocket() client: Socket) {
+    const userId = client.handshake.query.userId as string;
+    this.server.emit('user-activity');
+
+    console.log(userId, ' is typing');
+  }
+
   handleDisconnect(@ConnectedSocket() client: Socket) {
     const userId = client.handshake.query.userId as string;
     delete this.userSocketMap[userId];
